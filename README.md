@@ -16,7 +16,6 @@ There is three option of migrating using NGINX Ingress Resources
 •It is also supported, and all functions are converted to CRD resources.
 ![image](https://user-images.githubusercontent.com/59547386/171353803-e8a68e20-dadc-4bd4-8134-6e22e3be94b0.png)
 
-•It is also supported, and all functions are converted to CRD resources.
 
 2, New Ingess/CRD resource with  specific IngressClass Name
 
@@ -34,6 +33,7 @@ There is three option of migrating using NGINX Ingress Resources
 
 ## Showcase example
 ![image](https://user-images.githubusercontent.com/59547386/171353909-e7818c5b-2d8c-4b53-a0a1-3ecf2547a3e2.png)
+
 
 ![image](https://user-images.githubusercontent.com/59547386/171353953-ba03c0a3-fe66-457b-bc05-e2852e7c7cc6.png)
 
