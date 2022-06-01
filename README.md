@@ -14,6 +14,7 @@ There is three option of migrating using NGINX Ingress Resources
 •For functions that can be achieved through Ingress resource types and annotations, it is supported to convert to the same Ingress resource type and use NGINX annotations.
 •For advanced functions such as canary functionality, the NGINX Ingress Controller cannot be implemented through ingress with annotations, and is transformed into the resource type of CRD.
 •It is also supported, and all functions are converted to CRD resources.
+
 ![image](https://user-images.githubusercontent.com/59547386/171353803-e8a68e20-dadc-4bd4-8134-6e22e3be94b0.png)
 
 
@@ -21,6 +22,7 @@ There is three option of migrating using NGINX Ingress Resources
 
 •Do not modify the existing Ingress resources in the cluster and would not affect the existing access traffic.
 •A new set of Ingress resources for NGINX ICs can be used with user-specified IngressClass names so that ICs that also declare the --ingress-class can watch to this set of new Ingress resources.
+
 ![image](https://user-images.githubusercontent.com/59547386/171353852-b4e9af0b-8ea4-4465-8e58-c8bcc01db4d0.png)
 
 
@@ -28,10 +30,12 @@ There is three option of migrating using NGINX Ingress Resources
 
 •Do not modify the existing Ingress resources in the cluster and would not affect the existing access traffic.
 •In the CE, there are multiple ingresses with the same hostname with different paths, and we can't convert directly due to host collision detection, so we need to identify them first and then convert them to Mergeable Ingress resources.
+
 ![image](https://user-images.githubusercontent.com/59547386/171353885-e84e4b68-4770-4721-8253-dfe9a795750c.png)
 
 
 ## Showcase example
+
 ![image](https://user-images.githubusercontent.com/59547386/171353909-e7818c5b-2d8c-4b53-a0a1-3ecf2547a3e2.png)
 
 
@@ -45,7 +49,7 @@ In this section, we show how to quickly run NGINX Ingress Controller Migration t
 
 ### A Note about NGINX Ingress Controller
 
-If you’d like to use the tool with [NGINX Ingress Controller](https://github.com/nginxinc/kubernetes-ingress/) for Kubernetes, see [this doc](https://docs.nginx.com/nginx-ingress-controller/logging-and-monitoring/prometheus/) for the installation instructions.
+If you’d like to use the tool with [NGINX Ingress Controller](https://github.com/nginxinc/kubernetes-ingress/) for Kubernetes, see [this doc](https://docs.nginx.com/nginx-ingress-controller/) for the installation instructions.
 
 ### Prerequisites
 
