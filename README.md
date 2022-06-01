@@ -179,8 +179,4 @@ It would be uploaded to [DockerHub](https://hub.docker.com/r/nginx/nginx-prometh
 
 ## Building the Migration tool
 
-You can build the exporter using the provided Makefile. Before building the exporter, make sure the following software is installed on your machine:
-* make
-* git
-* Docker for building the container image
-* Go for building the binary
+
