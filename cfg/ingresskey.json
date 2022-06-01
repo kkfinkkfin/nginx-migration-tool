@@ -1,0 +1,12 @@
+{
+	"nginx.ingress.kubernetes.io/proxy-connect-timeout":"nginx.org/proxy-connect-timeout",
+	"nginx.ingress.kubernetes.io/proxy-send-timeout":"nginx.org/proxy-send-timeout",
+	"nginx.ingress.kubernetes.io/proxy-read-timeout":"nginx.org/proxy-read-timeout",
+	"nginx.ingress.kubernetes.io/proxy-body-size":"nginx.org/client-max-body-size",
+	"nginx.ingress.kubernetes.io/server-snippet":"nginx.org/server-snippets",
+	"nginx.ingress.kubernetes.io/stream-snippet":"nginx.org/stream-snippets",
+	"nginx.ingress.kubernetes.io/ssl-redirect":"ingress.kubernetes.io/ssl-redirect",
+	"nginx.ingress.kubernetes.io/load-balance":"nginx.org/lb-method",
+	"nginx.ingress.kubernetes.io/proxy-max-temp-file-size":"nginx.org/proxy-max-temp-file-size",
+	"nginx.ingress.kubernetes.io/upstream-hash-by":"nginx.org/lb-method"
+}
