@@ -5,9 +5,6 @@ The NGINX Ingress Controller Migration Tool use for migration of the [Kubernetes
 
 ## Overview
 
-[NGINX](https://nginx.org) exposes a handful of metrics via the [stub_status page](https://nginx.org/en/docs/http/ngx_http_stub_status_module.html#stub_status). [NGINX Plus](https://www.nginx.com/products/nginx/) provides a richer set of metrics via the [API](https://nginx.org/en/docs/http/ngx_http_api_module.html) and the [monitoring dashboard](https://www.nginx.com/products/nginx/live-activity-monitoring/). NGINX Prometheus exporter fetches the metrics from a single NGINX or NGINX Plus, converts 
-the metrics into appropriate Prometheus metrics types and finally exposes them via an HTTP server to be collected by [Prometheus](https://prometheus.io/).
-
 The annotations of the [Kubernetes ingress-nginx](https://kubernetes.github.io/ingress-nginx/) uses that [Nginx Ingress Controller](https://github.com/nginxinc/kubernetes-ingress) do use or do it different. This tool help to automate migration of the configurations to yaml of [Nginx Ingress Controller](https://github.com/nginxinc/kubernetes-ingress).
 
 There is three option of migrating using NGINX Ingress Resources
@@ -17,18 +14,28 @@ There is three option of migrating using NGINX Ingress Resources
 •For functions that can be achieved through Ingress resource types and annotations, it is supported to convert to the same Ingress resource type and use NGINX annotations.
 •For advanced functions such as canary functionality, the NGINX Ingress Controller cannot be implemented through ingress with annotations, and is transformed into the resource type of CRD.
 •It is also supported, and all functions are converted to CRD resources.
+![image](https://user-images.githubusercontent.com/59547386/171353803-e8a68e20-dadc-4bd4-8134-6e22e3be94b0.png)
+
+•It is also supported, and all functions are converted to CRD resources.
 
 2, New Ingess/CRD resource with  specific IngressClass Name
 
 •Do not modify the existing Ingress resources in the cluster and would not affect the existing access traffic.
 •A new set of Ingress resources for NGINX ICs can be used with user-specified IngressClass names so that ICs that also declare the --ingress-class can watch to this set of new Ingress resources.
+![image](https://user-images.githubusercontent.com/59547386/171353852-b4e9af0b-8ea4-4465-8e58-c8bcc01db4d0.png)
+
 
 3, New Mergeable Ingress resource with  specific IngressClass Name
 
 •Do not modify the existing Ingress resources in the cluster and would not affect the existing access traffic.
 •In the CE, there are multiple ingresses with the same hostname with different paths, and we can't convert directly due to host collision detection, so we need to identify them first and then convert them to Mergeable Ingress resources.
+![image](https://user-images.githubusercontent.com/59547386/171353885-e84e4b68-4770-4721-8253-dfe9a795750c.png)
+
 
 ## Showcase example
+![image](https://user-images.githubusercontent.com/59547386/171353909-e7818c5b-2d8c-4b53-a0a1-3ecf2547a3e2.png)
+
+![image](https://user-images.githubusercontent.com/59547386/171353953-ba03c0a3-fe66-457b-bc05-e2852e7c7cc6.png)
 
 
 
@@ -177,12 +184,3 @@ You can build the exporter using the provided Makefile. Before building the expo
 * git
 * Docker for building the container image
 * Go for building the binary
-
-### Building the Docker Image
-
-To build the Docker image with the exporter, run:
-```
-$ make container
-```
-
-Note: go is not required, as the exporter binary is built in a Docker container. See the [Dockerfile](build/Dockerfile).
