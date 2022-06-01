@@ -174,9 +174,6 @@ The program logs errors to the standard output. When using Docker, if it doesnâ€
 
 ## Releases
 
-### Docker images
-It would be uploaded to [DockerHub](https://hub.docker.com/r/nginx/nginx-prometheus-exporter/) and [GitHub Container](https://github.com/nginxinc/nginx-prometheus-exporter/pkgs/container/nginx-prometheus-exporter). But not now yet, please waiting. 
-
 
 ### Binaries
 
