@@ -103,16 +103,17 @@ Community Ingress Controller | NGINX Ingress Controller(Ingress) | NGINX Ingress
 nginx.ingress.kubernetes.io/affinity: "cookie"<br>nginx.ingress.kubernetes.io/affinity-mode: "balanced" \| "persistent"<br>nginx.ingress.kubernetes.io/affinity-canary-behavior: "sticky" \| "legacy"<br>nginx.ingress.kubernetes.io/session-cookie-name: "cookieName"<br>nginx.ingress.kubernetes.io/session-cookie-expires: "2"<br>nginx.ingress.kubernetes.io/session-cookie-path: "/example"<br>nginx.ingress.kubernetes.io/session-cookie-secure: “true”<br>nginx.ingress.kubernetes.io/session-cookie-change-on-failure: "true" \| "false"<br>nginx.ingress.kubernetes.io/session-cookie-samesite<br>nginx.ingress.kubernetes.io/session-cookie-conditional-samesite-none: "true" | nginx.com/sticky-cookie-services: "serviceName=example-svc cookie_name expires=1h domain=.example.com httponly samesite=strict\|lax\|none secure path=/example" | name: example<br>service: example-svc<br>port: 80<br>sessionCookie:<br>&emsp;&emsp;enable: true<br>&emsp;&emsp;name: cookieName<br>&emsp;&emsp;path: /example<br>&emsp;&emsp;expires: 2h<br>&emsp;&emsp;domain: .example.com<br>&emsp;&emsp;httpOnly: true<br>&emsp;&emsp;secure: true | 
 
 #### Redirect
+The redirect function of the Community Ingress Controller is implemented through LUA. Therefor is just simple convert it to rewrites of NGINX Ingress Controller.
 Community Ingress Controller | NGINX Ingress Controller
 ----|----|
-nginx.org/rewrites |
-nginx.ingress.kubernetes.io/force-ssl-redirect: "true" | 
+nginx.ingress.kubernetes.io/force-ssl-redirect: "true" | nginx.org/redirect-to-https, ingress.kubernetes.io/ssl-redirect
 nginx.ingress.kubernetes.io/from-to-www-redirect: "true" | 
 nginx.ingress.kubernetes.io/permanent-redirect: "http://www.google.com" |
 nginx.ingress.kubernetes.io/permanent-redirect-code: "308" |
 nginx.ingress.kubernetes.io/temporal-redirect |
+nginx.ingress.kubernetes.io/rewrite-target: "URI" | nginx.org/rewrites |
 nginx.ingress.kubernetes.io/enable-rewrite-log |
-nginx.ingress.kubernetes.io/rewrite-target: "URI" |
+nginx.ingress.kubernetes.io/ssl-redirect: "true,false" | ingress.kubernetes.io/ssl-redirect: "True,False" |
 
 ### Advanced annotations in Ingress type with snippets:
 Community Ingress Controller | NGINX Ingress Controller
@@ -124,28 +125,10 @@ nginx.ingress.kubernetes.io/default-backend: "default-svc" | nginx.org/location-
 nginx.ingress.kubernetes.io/proxy-cookie-domain | nginx.org/location-snippets: proxy_cookie_domain off; | 
 nginx.ingress.kubernetes.io/proxy-cookie-path | nginx.org/location-snippets: proxy_cookie_path off; | 
 
-#### Authentication
-Community Ingress Controller | NGINX Ingress Controller
-----|----|
-nginx.ingress.kubernetes.io/auth-type: [basic\|digest]<br>nginx.ingress.kubernetes.io/auth-secret: secretName<br>nginx.ingress.kubernetes.io/auth-secret-type: [auth-file\|auth-map]<br>nginx.ingress.kubernetes.io/auth-realm: "realm string" | 
-
-
-#### External Authentication
-Community Ingress Controller | NGINX Ingress Controller
-----|----|
-nginx.ingress.kubernetes.io/auth-url: "URL to the authentication service"<br>nginx.ingress.kubernetes.io/auth-keepalive<br>nginx.ingress.kubernetes.io/auth-keepalive-requests<br>nginx.ingress.kubernetes.io/auth-keepalive-timeout<br>nginx.ingress.kubernetes.io/auth-method<br>nginx.ingress.kubernetes.io/auth-signin<br>nginx.ingress.kubernetes.io/auth-signin-redirect-param<br>ginx.ingress.kubernetes.io/auth-response-headers<br>nginx.ingress.kubernetes.io/auth-proxy-set-headers<br>nginx.ingress.kubernetes.io/auth-request-redirect<br>nginx.ingress.kubernetes.io/auth-cache-key<br>nginx.ingress.kubernetes.io/auth-cache-duration<br>nginx.ingress.kubernetes.io/auth-always-set-cookie<br>nginx.ingress.kubernetes.io/auth-snippet | 
-
-
 #### CORS
 Community Ingress Controller | NGINX Ingress Controller
 ----|----|
-nginx.ingress.kubernetes.io/enable-cors: "true"<br>nginx.ingress.kubernetes.io/cors-allow-origin: "*"<br>nginx.ingress.kubernetes.io/cors-allow-methods: "PUT,GET,POST,OPTIONS"<br>nginx.ingress.kubernetes.io/cors-allow-headers: "DNT,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization"<br>nginx.ingress.kubernetes.io/cors-expose-headers: ""<br>nginx.ingress.kubernetes.io/cors-allow-origin: "*"<br>nginx.ingress.kubernetes.io/cors-allow-credentials："true"<br>nginx.ingress.kubernetes.io/cors-max-age: "600" |
-
-
-#### Rate Limiting
-Community Ingress Controller | NGINX Ingress Controller
-----|----|
-nginx.ingress.kubernetes.io/limit-connections<br>nginx.ingress.kubernetes.io/limit-rps: "number"<br>nginx.ingress.kubernetes.io/limit-rpm:“number”<br>nginx.ingress.kubernetes.io/limit-burst-multiplier: “multiplier”<br>nginx.ingress.kubernetes.io/limit-rate:“number”<br>nginx.ingress.kubernetes.io/limit-rate-after: “number”<br>nginx.ingress.kubernetes.io/limit-whitelist: “CIDR”|
+nginx.ingress.kubernetes.io/enable-cors: "true"<br>nginx.ingress.kubernetes.io/cors-allow-origin: "*"<br>nginx.ingress.kubernetes.io/cors-allow-methods: "PUT,GET,POST,OPTIONS"<br>nginx.ingress.kubernetes.io/cors-allow-headers: "DNT,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization"<br>nginx.ingress.kubernetes.io/cors-expose-headers: ""<br>nginx.ingress.kubernetes.io/cors-allow-origin: "*"<br>nginx.ingress.kubernetes.io/cors-allow-credentials："true"<br>nginx.ingress.kubernetes.io/cors-max-age: "600" | nginx.org/server-snippets: "add_header {{ $h.Name }} "{{ $h.Value }}" always;" | 
 
 #### SSL Passthrough
 The Community Ingress Controller to send TLS connections directly to the backend instead of letting NGINX decrypt the communication.
@@ -157,6 +140,8 @@ nginx.ingress.kubernetes.io/ssl-passthrough: [true\|false] | command:- -enable-t
 #### Mirror
 Community Ingress Controller | NGINX Ingress Controller
 ----|----|
+nginx.ingress.kubernetes.io/mirror-request-body: "off" | location-snippets |
+nginx.ingress.kubernetes.io/mirror-target: https://test.env.com/$request_uri |
 
 
 
@@ -165,32 +150,53 @@ Community Ingress Controller | NGINX Ingress Controller
 ### Advanced annotations in CRD type
 For the following scenarios, it is recommended to convert to CRD type resource objects, so that the configuration is more clearer than ingress.
 
+#### Redirect
+The redirect function of the Community Ingress Controller is implemented through LUA. Therefor is just simple convert it to rewrites of NGINX Ingress Controller.
+Community Ingress Controller | NGINX Ingress Controller
+----|----|
+nginx.ingress.kubernetes.io/rewrite-target: "URI" | rewritePath: /beans |
+nginx.ingress.kubernetes.io/ssl-redirect: "true,false" | VirtualServer.TLS.Redirect<br>enable: true<br>code: 301<br>basedOn: scheme
+
 #### Canary
 Community Ingress Controller | NGINX Ingress Controller
 ----|----|
-nginx.ingress.kubernetes.io/canary: "true"<br>nginx.ingress.kubernetes.io/canary-by-header: [always\|never\|custom]<br>nginx.ingress.kubernetes.io/canary-by-header-value: custom_value <br>nginx.ingress.kubernetes.io/canary-by-header-pattern: regex<br>nginx.ingress.kubernetes.io/canary-by-cookie: [always\|never\|custom]<br> nginx.ingress.kubernetes.io/canary-weight: [0-100]<br>nginx.ingress.kubernetes.io/canary-weight-total: [100(default)\|custom] | 
+nginx.ingress.kubernetes.io/canary: "true" | 
+nginx.ingress.kubernetes.io/canary-by-header: "always,never,custom" | matches:<br>- conditions:<br>&emsp;&emsp;- header: httpHeader<br>&emsp;&emsp;value: never<br>action:<br>&emsp;&emsp;pass: echo<br>&emsp;&emsp;- header: httpHeader<br>&emsp;&emsp;value: always<br>&emsp;&emsp;action:<br>&emsp;&emsp;pass: echo-canary<br>action:<br>pass: echo
+nginx.ingress.kubernetes.io/canary-by-header-value: custom_value | matches:<br>- conditions:<br>&emsp;&emsp;- header: httpHeader<br>&emsp;&emsp;value: my-value<br>action:<br>&emsp;&emsp;pass: echo-canary<br>action:<br>pass: echo
+nginx.ingress.kubernetes.io/canary-by-header-pattern: regex | - |
+nginx.ingress.kubernetes.io/canary-by-cookie: "always,never,custom" | matches:<br>- conditions:<br>&emsp;&emsp;- cookie: cookieName<br>&emsp;&emsp;value: never<br>&emsp;&emsp;action:<br>&emsp;&emsp;pass: echo<br>&emsp;&emsp;- cookie: cookieName<br>&emsp;&emsp;value: always<br>&emsp;&emsp;action:<br>&emsp;&emsp;pass: echo-canary<br>action:<br>&emsp;&emsp;pass: echo
+nginx.ingress.kubernetes.io/canary-weight: "0-100"<br>nginx.ingress.kubernetes.io/canary-weight-total: "100,custom" | splits:<br>- weight: 90<br>&emsp;&emsp;action:<br>&emsp;&emsp;pass: echo<br>- weight: 10<br>&emsp;&emsp;action:<br>&emsp;&emsp;pass: echo-canary
 
 #### CORS
 Community Ingress Controller | NGINX Ingress Controller
 ----|----|
-nginx.ingress.kubernetes.io/enable-cors: "true"<br>nginx.ingress.kubernetes.io/cors-allow-origin: "*"<br>nginx.ingress.kubernetes.io/cors-allow-methods: "PUT,GET,POST,OPTIONS"<br>nginx.ingress.kubernetes.io/cors-allow-headers: "DNT,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization"<br>nginx.ingress.kubernetes.io/cors-expose-headers: ""<br>nginx.ingress.kubernetes.io/cors-allow-origin: "*"<br>nginx.ingress.kubernetes.io/cors-allow-credentials："true"<br>nginx.ingress.kubernetes.io/cors-max-age: "600" |
+nginx.ingress.kubernetes.io/enable-cors: "true"<br>nginx.ingress.kubernetes.io/cors-allow-origin: "*"<br>nginx.ingress.kubernetes.io/cors-allow-methods: "PUT,GET,POST,OPTIONS"<br>nginx.ingress.kubernetes.io/cors-allow-headers: \|<br>&emsp;&emsp;"DNT,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization"<br>nginx.ingress.kubernetes.io/cors-expose-headers: ""<br>nginx.ingress.kubernetes.io/cors-allow-origin: "*"<br>nginx.ingress.kubernetes.io/cors-allow-credentials："true"<br>nginx.ingress.kubernetes.io/cors-max-age: "600" | responseHeaders:<br>&emsp;&emsp;add:<br>&emsp;&emsp;- name: Access-Control-Allow-Origin<br>&emsp;&emsp;value: "*"<br>&emsp;&emsp;- name: Access-Control-Allow-Credentials<br>&emsp;&emsp;value: "true"<br>&emsp;&emsp;- name: Access-Control-Allow-Methods<br>&emsp;&emsp;value: "PUT,GET,POST"<br>OPTIONS:<br>&emsp;&emsp;- name: Access-Control-Allow-Headers<br>&emsp;&emsp;value: "X-Forward-For"<br>&emsp;&emsp;- name: Access-Control-Max-Age<br>&emsp;&emsp;value: "600" |
 
 #### Rate Limiting
 Community Ingress Controller | NGINX Ingress Controller
 ----|----|
-nginx.ingress.kubernetes.io/limit-connections<br>nginx.ingress.kubernetes.io/limit-rps: "number"<br>nginx.ingress.kubernetes.io/limit-rpm:“number”<br>nginx.ingress.kubernetes.io/limit-burst-multiplier: “multiplier”<br>nginx.ingress.kubernetes.io/limit-rate:“number”<br>nginx.ingress.kubernetes.io/limit-rate-after: “number”<br>nginx.ingress.kubernetes.io/limit-whitelist: “CIDR”|
+nginx.ingress.kubernetes.io/limit-connections<br>nginx.ingress.kubernetes.io/limit-rps: "number"<br>nginx.ingress.kubernetes.io/limit-rpm:“number”<br>nginx.ingress.kubernetes.io/limit-burst-multiplier: “multiplier”<br>nginx.ingress.kubernetes.io/limit-rate:“number”<br>nginx.ingress.kubernetes.io/limit-rate-after: “number”<br>nginx.ingress.kubernetes.io/limit-whitelist: “CIDR”| rateLimit:<br>&emsp;&emsp;rate: {number}r/m<br>&emsp;&emsp;burst: {number} * {multiplier}<br>&emsp;&emsp;key: ${binary_remote_addr}<br>&emsp;&emsp;zoneSize: 5m |
 
+#### Authentication
+Community Ingress Controller | NGINX Ingress Controller
+----|----|
+nginx.ingress.kubernetes.io/auth-type: [basic\|digest]<br>nginx.ingress.kubernetes.io/auth-secret: secretName<br>nginx.ingress.kubernetes.io/auth-secret-type: [auth-file\|auth-map]<br>nginx.ingress.kubernetes.io/auth-realm: "realm string" | nginx.org/location-snippets | 
+
+#### Client Certificate Authentication
+Community Ingress Controller | NGINX Ingress Controller
+----|----|
+nginx.ingress.kubernetes.io/auth-tls-secret: namespace/secretName<br>nginx.ingress.kubernetes.io/auth-tls-verify-depth: "1"<br>nginx.ingress.kubernetes.io/auth-tls-verify-client: "on,off,optional,optional_no_ca"<br>nginx.ingress.kubernetes.io/auth-tls-error-page<br>nginx.ingress.kubernetes.io/auth-tls-pass-certificate-to-upstream: "true,false" | ingressMTLS:<br>&emsp;&emsp;clientCertSecret: secretName<br>&emsp;&emsp;verifyClient: “on”<br>&emsp;&emsp;verifyDepth: 1 |
+
+
+#### External Authentication
+Community Ingress Controller | NGINX Ingress Controller
+----|----|
+nginx.ingress.kubernetes.io/auth-url: "URL to the authentication service"<br>nginx.ingress.kubernetes.io/auth-keepalive<br>nginx.ingress.kubernetes.io/auth-keepalive-requests<br>nginx.ingress.kubernetes.io/auth-keepalive-timeout<br>nginx.ingress.kubernetes.io/auth-method<br>nginx.ingress.kubernetes.io/auth-signin<br>nginx.ingress.kubernetes.io/auth-signin-redirect-param<br>ginx.ingress.kubernetes.io/auth-response-headers<br>nginx.ingress.kubernetes.io/auth-proxy-set-headers<br>nginx.ingress.kubernetes.io/auth-request-redirect<br>nginx.ingress.kubernetes.io/auth-cache-key<br>nginx.ingress.kubernetes.io/auth-cache-duration<br>nginx.ingress.kubernetes.io/auth-always-set-cookie<br>nginx.ingress.kubernetes.io/auth-snippet | nginx.org/location-snippets |
 
 #### Backend Certificate Authentication
 Community Ingress Controller | NGINX Ingress Controller
 ----|----|
-nginx.ingress.kubernetes.io/proxy-ssl-secret: "secretName" | 
-nginx.ingress.kubernetes.io/proxy-ssl-ciphers: "DEFAULT"   |
-nginx.ingress.kubernetes.io/proxy-ssl-name: "server-name" |
-nginx.ingress.kubernetes.io/proxy-ssl-protocols: "TLSv1.2" |
-nginx.ingress.kubernetes.io/proxy-ssl-verify: "on|off" |
-nginx.ingress.kubernetes.io/proxy-ssl-verify-depth: "1" |
-nginx.ingress.kubernetes.io/proxy-ssl-server-name: "on|off" |
+nginx.ingress.kubernetes.io/proxy-ssl-secret: "secretName"<br>nginx.ingress.kubernetes.io/proxy-ssl-ciphers: "DEFAULT"<br>nginx.ingress.kubernetes.io/proxy-ssl-name: "server-name"<br>nginx.ingress.kubernetes.io/proxy-ssl-protocols: "TLSv1.2"<br>nginx.ingress.kubernetes.io/proxy-ssl-verify: "on,off"<br>nginx.ingress.kubernetes.io/proxy-ssl-verify-depth: "1"<br>nginx.ingress.kubernetes.io/proxy-ssl-server-name: "on,off" | egressMTLS:<br>&emsp;&emsp;tlsSecret: secretName<br>&emsp;&emsp;verifyServer: true\|false<br>&emsp;&emsp;verifyDepth: 1<br>&emsp;&emsp;protocols: TLSv1.2<br>&emsp;&emsp;ciphers: DEFAULT<br>&emsp;&emsp;sslName: server-name<br>&emsp;&emsp;serverName: true\|false |
 
 
 ### Megertable Ingresses
