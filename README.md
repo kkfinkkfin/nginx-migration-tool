@@ -12,8 +12,8 @@ There is three option of migrating using NGINX Ingress Resources
 1, Convert Ingress to Ingress or CRD
 
 •For functions that can be achieved through Ingress resource types and annotations, it is supported to convert to the same Ingress resource type and use NGINX annotations.
-•For advanced functions such as canary functionality, the NGINX Ingress Controller cannot be implemented through ingress with annotations, and is transformed into the resource type of CRD.
-•It is also supported, and all functions are converted to CRD resources.
+<br>•For advanced functions such as canary functionality, the NGINX Ingress Controller cannot be implemented through ingress with annotations, and is transformed into the resource type of CRD.
+<br>•It is also supported, and all functions are converted to CRD resources.
 
 ![image](https://user-images.githubusercontent.com/59547386/171353803-e8a68e20-dadc-4bd4-8134-6e22e3be94b0.png)
 
@@ -21,7 +21,7 @@ There is three option of migrating using NGINX Ingress Resources
 2, New Ingess/CRD resource with  specific IngressClass Name
 
 •Do not modify the existing Ingress resources in the cluster and would not affect the existing access traffic.
-•A new set of Ingress resources for NGINX ICs can be used with user-specified IngressClass names so that ICs that also declare the --ingress-class can watch to this set of new Ingress resources.
+<br>•A new set of Ingress resources for NGINX ICs can be used with user-specified IngressClass names so that ICs that also declare the --ingress-class can watch to this set of new Ingress resources.
 
 ![image](https://user-images.githubusercontent.com/59547386/171353852-b4e9af0b-8ea4-4465-8e58-c8bcc01db4d0.png)
 
@@ -29,7 +29,7 @@ There is three option of migrating using NGINX Ingress Resources
 3, New Mergeable Ingress resource with  specific IngressClass Name
 
 •Do not modify the existing Ingress resources in the cluster and would not affect the existing access traffic.
-•In the CE, there are multiple ingresses with the same hostname with different paths, and we can't convert directly due to host collision detection, so we need to identify them first and then convert them to Mergeable Ingress resources.
+<br>•In the CE, there are multiple ingresses with the same hostname with different paths, and we can't convert directly due to host collision detection, so we need to identify them first and then convert them to Mergeable Ingress resources.
 
 ![image](https://user-images.githubusercontent.com/59547386/171353885-e84e4b68-4770-4721-8253-dfe9a795750c.png)
 
@@ -79,7 +79,6 @@ Usage of ./nginx-migration-tool:
 ### Advanced annotations in Ingress type with corresponding keys:
 Community Ingress Controller | NGINX Ingress Controller
 ----|----|
-nginx.ingress.kubernetes.io/app-root | nginx.org/server-snippets: "if($request_uri = '/'){  return 302 $http_x_forward_proto://$host{{ $location.Rewrite.AppRoot }};  }"` |
 nginx.ingress.kubernetes.io/configuration-snippet | nginx.org/location-snippets |
 nginx.ingress.kubernetes.io/proxy-body-size | nginx.org/client-max-body-size | 
 nginx.ingress.kubernetes.io/proxy-connect-timeout | nginx.org/proxy-connect-timeout | 
@@ -213,6 +212,8 @@ nginx.ingress.kubernetes.io/modsecurity-transaction-id| - |
 nginx.ingress.kubernetes.io/modsecurity-snippet | - | 
 
 #### Global Rate Limiting
+Community Ingress Controller | NGINX Ingress Controller
+----|----|
 nginx.ingress.kubernetes.io/global-rate-limit | - |
 nginx.ingress.kubernetes.io/global-rate-limit-window | - |
 nginx.ingress.kubernetes.io/global-rate-limit-key | - |
