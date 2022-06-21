@@ -220,6 +220,16 @@ nginx.ingress.kubernetes.io/global-rate-limit-key | - |
 nginx.ingress.kubernetes.io/global-rate-limit-ignored-cidrs | - |
 
 
+#### Influxdb
+Community Ingress Controller | NGINX Ingress Controller
+----|----|
+nginx.ingress.kubernetes.io/enable-influxdb: "true|false" | - |
+nginx.ingress.kubernetes.io/influxdb-measurement: "nginx-reqs" | - |
+nginx.ingress.kubernetes.io/influxdb-port: "8089" | - |
+nginx.ingress.kubernetes.io/influxdb-host: "127.0.0.1" | - |
+nginx.ingress.kubernetes.io/influxdb-server-name: "nginx-ingress" | - |
+
+
 ## Troubleshooting
 
 The program logs errors to the standard output. When using Docker, if it doesn’t work as expected, check its logs using [docker logs](https://docs.docker.com/engine/reference/commandline/logs/) command.
