@@ -114,6 +114,10 @@ nginx.ingress.kubernetes.io/rewrite-target: "URI" | nginx.org/rewrites |
 nginx.ingress.kubernetes.io/enable-rewrite-log |
 nginx.ingress.kubernetes.io/ssl-redirect: "true,false" | ingress.kubernetes.io/ssl-redirect: "True,False" |
 
+
+
+
+
 ### Advanced annotations in Ingress type with snippets:
 Community Ingress Controller | NGINX Ingress Controller
 ----|----|
@@ -135,13 +139,21 @@ Community Ingress Controller | NGINX Ingress Controller
 ----|----|
 nginx.ingress.kubernetes.io/ssl-passthrough: [true\|false] | command:- -enable-tls-passthrough=true
 
-
 #### Mirror
 Community Ingress Controller | NGINX Ingress Controller
 ----|----|
 nginx.ingress.kubernetes.io/mirror-request-body: "off" | location-snippets |
 nginx.ingress.kubernetes.io/mirror-target: https://test.env.com/$request_uri |
 
+#### Authentication
+Community Ingress Controller | NGINX Ingress Controller
+----|----|
+nginx.ingress.kubernetes.io/auth-type: [basic\|digest]<br>nginx.ingress.kubernetes.io/auth-secret: secretName<br>nginx.ingress.kubernetes.io/auth-secret-type: [auth-file\|auth-map]<br>nginx.ingress.kubernetes.io/auth-realm: "realm string" | nginx.org/location-snippets | 
+
+#### External Authentication
+Community Ingress Controller | NGINX Ingress Controller
+----|----|
+nginx.ingress.kubernetes.io/auth-url: "URL to the authentication service"<br>nginx.ingress.kubernetes.io/auth-keepalive<br>nginx.ingress.kubernetes.io/auth-keepalive-requests<br>nginx.ingress.kubernetes.io/auth-keepalive-timeout<br>nginx.ingress.kubernetes.io/auth-method<br>nginx.ingress.kubernetes.io/auth-signin<br>nginx.ingress.kubernetes.io/auth-signin-redirect-param<br>ginx.ingress.kubernetes.io/auth-response-headers<br>nginx.ingress.kubernetes.io/auth-proxy-set-headers<br>nginx.ingress.kubernetes.io/auth-request-redirect<br>nginx.ingress.kubernetes.io/auth-cache-key<br>nginx.ingress.kubernetes.io/auth-cache-duration<br>nginx.ingress.kubernetes.io/auth-always-set-cookie<br>nginx.ingress.kubernetes.io/auth-snippet | nginx.org/location-snippets |
 
 
 
@@ -176,21 +188,10 @@ Community Ingress Controller | NGINX Ingress Controller
 ----|----|
 nginx.ingress.kubernetes.io/limit-connections<br>nginx.ingress.kubernetes.io/limit-rps: "number"<br>nginx.ingress.kubernetes.io/limit-rpm:“number”<br>nginx.ingress.kubernetes.io/limit-burst-multiplier: “multiplier”<br>nginx.ingress.kubernetes.io/limit-rate:“number”<br>nginx.ingress.kubernetes.io/limit-rate-after: “number”<br>nginx.ingress.kubernetes.io/limit-whitelist: “CIDR”| rateLimit:<br>&emsp;&emsp;rate: {number}r/m<br>&emsp;&emsp;burst: {number} * {multiplier}<br>&emsp;&emsp;key: ${binary_remote_addr}<br>&emsp;&emsp;zoneSize: 5m |
 
-#### Authentication
-Community Ingress Controller | NGINX Ingress Controller
-----|----|
-nginx.ingress.kubernetes.io/auth-type: [basic\|digest]<br>nginx.ingress.kubernetes.io/auth-secret: secretName<br>nginx.ingress.kubernetes.io/auth-secret-type: [auth-file\|auth-map]<br>nginx.ingress.kubernetes.io/auth-realm: "realm string" | nginx.org/location-snippets | 
-
 #### Client Certificate Authentication
 Community Ingress Controller | NGINX Ingress Controller
 ----|----|
 nginx.ingress.kubernetes.io/auth-tls-secret: namespace/secretName<br>nginx.ingress.kubernetes.io/auth-tls-verify-depth: "1"<br>nginx.ingress.kubernetes.io/auth-tls-verify-client: "on,off,optional,optional_no_ca"<br>nginx.ingress.kubernetes.io/auth-tls-error-page<br>nginx.ingress.kubernetes.io/auth-tls-pass-certificate-to-upstream: "true,false" | ingressMTLS:<br>&emsp;&emsp;clientCertSecret: secretName<br>&emsp;&emsp;verifyClient: “on”<br>&emsp;&emsp;verifyDepth: 1 |
-
-
-#### External Authentication
-Community Ingress Controller | NGINX Ingress Controller
-----|----|
-nginx.ingress.kubernetes.io/auth-url: "URL to the authentication service"<br>nginx.ingress.kubernetes.io/auth-keepalive<br>nginx.ingress.kubernetes.io/auth-keepalive-requests<br>nginx.ingress.kubernetes.io/auth-keepalive-timeout<br>nginx.ingress.kubernetes.io/auth-method<br>nginx.ingress.kubernetes.io/auth-signin<br>nginx.ingress.kubernetes.io/auth-signin-redirect-param<br>ginx.ingress.kubernetes.io/auth-response-headers<br>nginx.ingress.kubernetes.io/auth-proxy-set-headers<br>nginx.ingress.kubernetes.io/auth-request-redirect<br>nginx.ingress.kubernetes.io/auth-cache-key<br>nginx.ingress.kubernetes.io/auth-cache-duration<br>nginx.ingress.kubernetes.io/auth-always-set-cookie<br>nginx.ingress.kubernetes.io/auth-snippet | nginx.org/location-snippets |
 
 #### Backend Certificate Authentication
 Community Ingress Controller | NGINX Ingress Controller
