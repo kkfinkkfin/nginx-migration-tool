@@ -1,6 +1,6 @@
 # NGINX Ingress Controller Migration Tool
 
-The NGINX Ingress Controller Migration Tool use for migration of the [Kubernetes ingress-nginx](https://kubernetes.github.io/ingress-nginx/) configurations yaml for to [Nginx Ingress Controller](https://github.com/nginxinc/kubernetes-ingress).
+The NGINX Ingress Controller Migration Tool use for migration of the [Kubernetes ingress-nginx](https://kubernetes.github.io/ingress-nginx/) configurations YAML to [Nginx Ingress Controller](https://github.com/nginxinc/kubernetes-ingress).
  
 
 ## Overview
