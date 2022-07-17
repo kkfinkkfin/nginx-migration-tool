@@ -12,5 +12,7 @@
 	"nginx.ingress.kubernetes.io/proxy-max-temp-file-size": "nginx.org/proxy-max-temp-file-size",
 	"nginx.ingress.kubernetes.io/configuration-snippet": "nginx.org/location-snippets",
 	"nginx.ingress.kubernetes.io/server-snippet":"nginx.org/server-snippets",
-	"nginx.ingress.kubernetes.io/stream-snippet":"nginx.org/stream-snippets"
+	"nginx.ingress.kubernetes.io/stream-snippet":"nginx.org/stream-snippets",
+	"nginx.ingress.kubernetes.io/proxy-cookie-domain": "nginx.org/location-snippets",
+	"nginx.ingress.kubernetes.io/proxy-cookie-path": "nginx.org/location-snippets"
 }

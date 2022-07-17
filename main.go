@@ -137,6 +137,10 @@ func main() {
 				switch key {
 				case "nginx.ingress.kubernetes.io/upstream-hash-by":
 					newingress.Annotations[key] = "hash " + value + " consistent"
+				case "nginx.ingress.kubernetes.io/proxy-cookie-domain":
+					newingress.Annotations[key] = "proxy_cookie_domain " + value
+				case "nginx.ingress.kubernetes.io/proxy-cookie-path":
+					newingress.Annotations[key] = "proxy_cookie_path " + value
 				}
 			}
 
