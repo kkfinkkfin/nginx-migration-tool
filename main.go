@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"path/filepath"
 	"runtime"
 	"time"
 
@@ -15,12 +16,12 @@ import (
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/client-go/informers"
 	"k8s.io/client-go/kubernetes"
+	"k8s.io/client-go/util/homedir"
 
 	//	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/cache"
+	"k8s.io/client-go/tools/clientcmd"
 	"k8s.io/klog"
-
-	"k8s.io/client-go/rest"
 )
 
 var (
@@ -50,32 +51,37 @@ func main() {
 		os.Exit(0)
 	}
 
-	//config, kubeClient := createConfigAndKubeClient()
-
-	// var kubeconfig *string
-	//ctx := context.Background()
-	// if home := homedir.HomeDir(); home != "" {
-	// 	kubeconfig = flag.String("kubeconfig", filepath.Join(home, ".kube", "config"), "(optional) absolute path to the kubeconfig file")
-	// } else {
-	// 	kubeconfig = flag.String("kubeconfig", "", "absolute path to the kubeconfig file")
-	// }
-	// flag.Parse()
-	// config, err := clientcmd.BuildConfigFromFlags("", *kubeconfig)
-	// if err != nil {
-	// 	klog.Fatal(err)
-	// 	return
-	// }
-	//klog.Fatal("config = ", config)
-	//create clientset
-
-	var config *rest.Config
+	//run as local
+	var kubeconfig *string
 	ctx := context.Background()
-
-	clientset, err := kubernetes.NewForConfig(config)
+	if home := homedir.HomeDir(); home != "" {
+		kubeconfig = flag.String("kubeconfig", filepath.Join(home, ".kube", "config"), "(optional) absolute path to the kubeconfig file")
+	} else {
+		kubeconfig = flag.String("kubeconfig", "", "absolute path to the kubeconfig file")
+	}
+	flag.Parse()
+	conf, err := clientcmd.BuildConfigFromFlags("", *kubeconfig)
 	if err != nil {
 		klog.Fatal(err)
 		return
 	}
+	clientset, err := kubernetes.NewForConfig(conf)
+	if err != nil {
+		klog.Fatal(err)
+		return
+	}
+	//end of local read kubeconfig
+
+	//Run As Docker
+	// var config *rest.Config
+	// ctx := context.Background()
+
+	//clientset, err := kubernetes.NewForConfig(config)
+	// if err != nil {
+	// 	klog.Fatal(err)
+	// 	return
+	// }
+	// End of run as docker
 
 	//read config json into keyinfos map
 	f, err := ioutil.ReadFile("./cfg/ingresskey.json")
